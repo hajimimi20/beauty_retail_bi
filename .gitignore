@@ -1,12 +1,12 @@
 # Python
-.venv/                  #不要把python套件上傳github
+.venv/
 __pycache__/
 *.pyc
 
 # Environment variables
-.env                    #不要把資料庫帳密上傳github
+.env
 
-# Data                  #不要把實際下載的大型資料直接放進Git
+# Data
 data/raw/*
 data/processed/*
 
@@ -19,6 +19,6 @@ data/processed/*
 # IDE
 .idea/
 
-# OS
+# Operating system
 .DS_Store
 Thumbs.db
