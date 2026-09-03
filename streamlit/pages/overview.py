@@ -1,72 +1,120 @@
 import streamlit as st
+import pandas as pd
 
 
 def show():
-    st.title("📊 Overview")
 
+    st.title("📊 Overview")
     st.subheader("North American Beauty Retail Market")
 
-    st.markdown("---")
+    # -------------------------
+    # Sample data
+    # -------------------------
 
+    data = {
+        "Country": [
+            "United States",
+            "United States",
+            "United States",
+            "Canada",
+            "Canada",
+            "Canada",
+        ],
+        "Category": [
+            "Cosmetics",
+            "Skincare",
+            "Haircare",
+            "Cosmetics",
+            "Skincare",
+            "Haircare",
+        ],
+        "Stores": [
+            1200,
+            950,
+            780,
+            320,
+            280,
+            210,
+        ],
+    }
+
+    df = pd.DataFrame(data)
+
+    # -------------------------
     # Key Metrics
+    # -------------------------
+
+    total_stores = df["Stores"].sum()
+    total_countries = df["Country"].nunique()
+    total_categories = df["Category"].nunique()
+
     st.markdown("### Key Metrics")
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3 = st.columns(3)
 
     with col1:
         st.metric(
-            label="Total Stores",
-            value="—"
+            "Total Stores",
+            f"{total_stores:,}"
         )
 
     with col2:
         st.metric(
-            label="United States",
-            value="—"
+            "Countries",
+            total_countries
         )
 
     with col3:
         st.metric(
-            label="Canada",
-            value="—"
-        )
-
-    with col4:
-        st.metric(
-            label="Beauty Categories",
-            value="—"
+            "Beauty Categories",
+            total_categories
         )
 
     st.markdown("---")
 
-    # Market Overview
-    st.markdown("### Market Overview")
+    # -------------------------
+    # Store Distribution
+    # -------------------------
 
-    col1, col2 = st.columns(2)
+    st.markdown("### Store Distribution by Country")
 
-    with col1:
-        st.markdown("#### Store Distribution")
-        st.info(
-            "Store distribution analysis will be added "
-            "after the retail data is prepared."
-        )
+    country_data = (
+        df.groupby("Country")["Stores"]
+        .sum()
+        .reset_index()
+    )
 
-    with col2:
-        st.markdown("#### Category Performance")
-        st.info(
-            "Category performance analysis will be added "
-            "after the category data is prepared."
-        )
+    st.bar_chart(
+        country_data,
+        x="Country",
+        y="Stores"
+    )
 
-    st.markdown("---")
+    # -------------------------
+    # Category Analysis
+    # -------------------------
 
-    # Data Status
-    st.markdown("### Data Pipeline Status")
+    st.markdown("### Stores by Beauty Category")
 
-    st.write("Census / Open Data")
+    category_data = (
+        df.groupby("Category")["Stores"]
+        .sum()
+        .reset_index()
+    )
 
-    st.progress(0.25)
+    st.bar_chart(
+        category_data,
+        x="Category",
+        y="Stores"
+    )
 
-    st.write(
-        "Python ETL → MariaDB → Analytics → Streamlit"
+    # -------------------------
+    # Data Explorer
+    # -------------------------
+
+    st.markdown("### Sample Data")
+
+    st.dataframe(
+        df,
+        use_container_width=True
     )
