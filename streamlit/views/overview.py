@@ -5,7 +5,7 @@ import pandas as pd
 def show():
 
     st.title("📊 Overview")
-    st.subheader("North American Beauty Retail Market")
+    st.header("North American Beauty Retail Market")
 
     # -------------------------
     # Sample data
@@ -41,12 +41,29 @@ def show():
     df = pd.DataFrame(data)
 
     # -------------------------
+    # Filters
+    # -------------------------
+
+    st.markdown("### Filters")
+
+    selected_country = st.selectbox(
+        "Select Country",
+        ["All"] + sorted(df["Country"].unique().tolist())
+    )
+
+    if selected_country != "All":
+        filtered_df = df[df["Country"] == selected_country]
+    else:
+        filtered_df = df
+
+
+    # -------------------------
     # Key Metrics
     # -------------------------
 
-    total_stores = df["Stores"].sum()
-    total_countries = df["Country"].nunique()
-    total_categories = df["Category"].nunique()
+    total_stores = filtered_df["Stores"].sum()
+    total_countries = filtered_df["Country"].nunique()
+    total_categories = filtered_df["Category"].nunique()
 
     st.markdown("### Key Metrics")
 
@@ -79,7 +96,7 @@ def show():
     st.markdown("### Store Distribution by Country")
 
     country_data = (
-        df.groupby("Country")["Stores"]
+        filtered_df.groupby("Country")["Stores"]
         .sum()
         .reset_index()
     )
@@ -97,7 +114,7 @@ def show():
     st.markdown("### Stores by Beauty Category")
 
     category_data = (
-        df.groupby("Category")["Stores"]
+        filtered_df.groupby("Category")["Stores"]
         .sum()
         .reset_index()
     )

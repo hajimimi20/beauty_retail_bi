@@ -1,7 +1,7 @@
 import streamlit as st
 
-from pages import home
-from pages import overview
+from views import home
+from views import overview
 
 
 # Page configuration
