@@ -1,24 +1,30 @@
 import pandas as pd
 
 
+CATEGORY_MAPPING = {
+    "446": "Health and Personal Care Stores",
+    "44611": "Pharmacies and Drug Stores",
+}
+
+
 def map_retail_categories(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Map Census retail category codes to Beauty Retail categories.
-
-    The category mapping will be completed after inspecting
-    the actual Census category codes.
+    Filter Census MRTS data for beauty-related retail categories
+    and add readable category names.
     """
 
     df = df.copy()
 
-    # Placeholder for category mapping.
-    # Example:
-    # category_mapping = {
-    #     "XXXX": "Cosmetics",
-    #     "XXXX": "Skincare",
-    #     "XXXX": "Haircare",
-    # }
+    # Keep beauty-related retail categories
+    df = df[df["category_code"].isin(CATEGORY_MAPPING)]
 
-    # df["beauty_category"] = df["category_code"].map(category_mapping)
+    # Keep monthly sales only
+    df = df[df["data_type_code"] == "SM"]
+
+    # Keep seasonally adjusted data
+    df = df[df["seasonally_adj"] == "yes"]
+
+    # Add readable category names
+    df["category_name"] = df["category_code"].map(CATEGORY_MAPPING)
 
     return df

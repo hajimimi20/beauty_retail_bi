@@ -41,6 +41,7 @@ def get_retail_sales(year: int = 2025) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=columns)
 
 
+
 if __name__ == "__main__":
     df = get_retail_sales()
 
