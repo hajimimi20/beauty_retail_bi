@@ -27,4 +27,30 @@ def map_retail_categories(df: pd.DataFrame) -> pd.DataFrame:
     # Add readable category names
     df["category_name"] = df["category_code"].map(CATEGORY_MAPPING)
 
+
+    # Convert API fields to database-ready fields
+    df["sales_month"] = pd.to_datetime(
+        df["time"],
+        format="%Y-%m",
+    )
+
+    df["sales_value"] = pd.to_numeric(
+        df["cell_value"],
+        errors="coerce",
+    )
+
+    df["seasonally_adjusted"] = (
+        df["seasonally_adj"] == "yes"
+    )
+
+    df = df[
+    [
+        "category_code",
+        "category_name",
+        "sales_month",
+        "sales_value",
+        "seasonally_adjusted",
+    ]
+]
+
     return df
